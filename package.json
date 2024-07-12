@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npx tsc -w",
     "dev": "npx nodemon",
-    "build": "tsc",
+    "build": "npx prisma generate && tsc",
     "prepare": "husky install",
     "format": "prettier --write .",
     "check-types": "tsc --pretty --noEmit",
