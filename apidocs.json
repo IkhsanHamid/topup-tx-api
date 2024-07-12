@@ -1,0 +1,216 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API TopUp",
+    "description": "List All API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3100/api",
+      "description": "development"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Module Membership",
+      "description": "Module Membership"
+    }
+  ],
+  "paths": {
+    "/v1/auth/registration": {
+      "post": {
+        "tags": ["Module Membership"],
+        "summary": "Register a new user",
+        "description": "**API Registration Public (Tidak perlu Token untuk mengaksesnya)**\n\nDigunakan untuk melakukan registrasi User agar bisa Login kedalam aplikasi\n\n**Ketentuan**:\n- Parameter request **email** harus terdapat validasi format email.\n- Parameter request **password** minimal harus memiliki panjang 8 karakter.\n- Handling Response sesuai dokumentasi Response di bawah.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "user@example.com"
+                  },
+                  "first_name": {
+                    "type": "string",
+                    "format": "text",
+                    "example": "ikhsan"
+                  },
+                  "last_name": {
+                    "type": "string",
+                    "format": "text",
+                    "example": "hamid"
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 8,
+                    "example": "password123"
+                  }
+                },
+                "required": ["email", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 0
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Registrasi berhasil silahkan login"
+                    },
+                    "data": null
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 102
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Paramter email tidak sesuai format"
+                    },
+                    "data": null
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/login": {
+      "post": {
+        "tags": ["Module Membership"],
+        "summary": "Login user",
+        "description": "**API Login Public (Tidak perlu Token untuk mengaksesnya)**\n\nDigunakan untuk melakukan login dan mendapatkan authentication berupa JWT (Json Web Token)\n\n**Ketentuan**:\n- Parameter request **email** harus terdapat validasi format email.\n- Parameter request **password** minimal harus memiliki panjang 8 karakter.\n- Handling Response sesuai dokumentasi Response di bawah.\n- **JWT** yang digenerate harus memuat payload email dan di set expiration selama 12 jam dari waktu di generate",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "user@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 8,
+                    "example": "password123"
+                  }
+                },
+                "required": ["email", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Berhasil Login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 0
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Login Sukses"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "text",
+                          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiNTRVdXRjYTdCS0ZPX0ZUZGZ1bXlJem9zSTRKa1VxUGZVZ0ROSTUwelRTQlo2aHoyY0hKZ1VMb1loM09HUUd0ekQxV3dTX194aHBNZTE2SGFscVRzcEhjS21UclJ3S2FYYmZob3AzdzFFUHJ2NFdBQmk1c0RpdV9DSnZTSWt2MDFTbEU0QU5pbVB0bUx5azZoUzlOalVQNEZaVVpfRVBtcEk4Y3pNc3ZWa2JFPSIsImlhdCI6MTYyNjkyODk3MSwiZXhwIjoyNTU2MTE4Nzk4fQ.9C9NvhZYKivhGWnrjo4Wr1Rv-wur1wCm0jqfK9XDD8U"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 102
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Paramter email tidak sesuai format"
+                    },
+                    "data": null
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 102
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Username atau password salah"
+                    },
+                    "data": null
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/profile": {
+      "get": {
+        "tags": ["Module Membership"],
+        "summary": "User Profile",
+        "description": "**API Login Public (memerlukan Token untuk mengaksesnya)**\n\nDigunakan untuk mendapatkan informasi profile User\n\n**Ketentuan**:\n- PService ini harus menggunakan **Bearer Token JWT** untuk mengaksesnya\n- Handling Response sesuai dokumentasi Response di bawah.\n- Tidak ada parameter email di query param url ataupun request body, parameter email diambil dari payload JWT yang didapatkan dari hasil login"
+      }
+    }
+  }
+}

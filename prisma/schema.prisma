@@ -1,0 +1,63 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
+  engineType      = "binary"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id             Int              @id @default(autoincrement())
+  first_name     String?          @db.VarChar
+  last_name      String?          @db.VarChar
+  password       String?
+  email          String?          @db.VarChar
+  profile_image  String?          @db.VarChar
+  is_login       Boolean?
+  authentication authentication[]
+  balance        balance[]
+  transaction    transaction[]
+}
+
+model transaction {
+  id               Int       @id @default(autoincrement())
+  invoice_number   String?   @db.VarChar
+  transaction_type String?   @db.VarChar
+  total_amount     Int?
+  created_on       DateTime? @db.Date
+  user_id          Int?
+  users            users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user")
+}
+
+model balance {
+  id      Int    @id @default(autoincrement())
+  balance Int?
+  user_id Int?
+  users   users? @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user")
+}
+
+model banner {
+  id           Int     @id @default(autoincrement())
+  banner_name  String? @db.VarChar
+  banner_image String? @db.VarChar
+  description  String? @db.VarChar
+}
+
+model services {
+  id            Int     @id @default(autoincrement())
+  service_code  String? @db.VarChar
+  service_name  String? @db.VarChar
+  service_icon  String? @db.VarChar
+  service_tarif Int?
+}
+
+model authentication {
+  id            Int     @id @default(autoincrement())
+  access_token  String?
+  refresh_token String?
+  user_id       Int?
+  users         users?  @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_authentication")
+}
