@@ -29,6 +29,8 @@ model transaction {
   total_amount     Int?
   created_on       DateTime? @db.Date
   user_id          Int?
+  service_id       Int?
+  services         services? @relation(fields: [service_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_service")
   users            users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user")
 }
 
@@ -47,11 +49,12 @@ model banner {
 }
 
 model services {
-  id            Int     @id @default(autoincrement())
-  service_code  String? @db.VarChar
-  service_name  String? @db.VarChar
-  service_icon  String? @db.VarChar
+  id            Int           @id @default(autoincrement())
+  service_code  String?       @db.VarChar
+  service_name  String?       @db.VarChar
+  service_icon  String?       @db.VarChar
   service_tarif Int?
+  transaction   transaction[]
 }
 
 model authentication {
