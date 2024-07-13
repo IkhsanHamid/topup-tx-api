@@ -1,9 +1,19 @@
 import multer from 'multer'
 import path from 'path'
+import fs from 'fs'
 
 // Set storage engine
 const storage = multer.diskStorage({
-  destination: './src/uploads',
+  destination: (req, file, cb) => {
+    const dir = './src/uploads'
+
+    // Check if the directory exists, if not, create it
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true }) // Create directory recursively
+    }
+
+    cb(null, dir)
+  },
   filename: (req, file, cb) => {
     cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`)
   }
