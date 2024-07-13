@@ -1,7 +1,7 @@
 import { type Request, type Response } from 'express'
 import { generateTransaction, getBalance, topup, transactionHistory } from '../services/transaction.service'
 import { logger } from '../config/logger'
-import { topUpValidation, transactionValidation } from '../validations/transaction.validation'
+import { topUpValidation, transactionValidation, txHistoryValidation } from '../validations/transaction.validation'
 
 export const checkBalance = async (req: Request, res: Response) => {
   try {
@@ -51,7 +51,21 @@ export const generateTx = async (req: Request, res: Response) => {
 export const txHistory = async (req: Request, res: Response) => {
   try {
     const { skip, limit } = req.query
-    const history = await transactionHistory(Number(skip), Number(limit), req.locals.id)
+    const payload = {
+      skip: Number(skip),
+      limit: Number(limit),
+      userId: req.locals.id
+    }
+
+    // START: validation payload
+    const { error, value } = txHistoryValidation(payload)
+    if (error) {
+      logger.error('ERR: transaction - get transaction history = ', error.details[0].message)
+      return res.send({ status: 102, message: error.details[0].message, data: null })
+    }
+    // END: validation payload
+
+    const history = await transactionHistory(value)
     return res.send({ status: 0, message: 'Get History Berhasil', data: history.data })
   } catch (error) {
     logger.error('ERR: transaction - history = ', error)

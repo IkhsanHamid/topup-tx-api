@@ -25,3 +25,9 @@ export interface history {
   created_on?: Date
   service_name: string
 }
+
+export interface txHistory {
+  userId: number
+  skip: number
+  limit: number
+}

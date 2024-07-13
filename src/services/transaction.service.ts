@@ -1,5 +1,11 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain */
-import { type transactionModel, type balance, type topupType, type history } from '../types/transaction.type'
+import {
+  type transactionModel,
+  type balance,
+  type topupType,
+  type history,
+  type txHistory
+} from '../types/transaction.type'
 import { logger } from '../config/logger'
 import prisma, { handlePrismaError } from '../config/prisma'
 import { type service } from '../types/banner.type'
@@ -148,7 +154,7 @@ export const generateTransaction = async (serviceCode: string, userId: number) =
   return transaction
 }
 
-export const transactionHistory = async (skip: number, limit: number, userId: number) => {
+export const transactionHistory = async (payload: txHistory) => {
   try {
     const history: history[] = await prisma.$queryRaw`
             SELECT 
@@ -162,12 +168,18 @@ export const transactionHistory = async (skip: number, limit: number, userId: nu
             LEFT JOIN 
                 services s ON s.id = t.service_id
             WHERE 
-                t.user_id = ${userId};
+                t.user_id = ${payload.userId}
+            LIMIT ${payload.limit}
+            OFFSET ${payload.skip};
         `
 
     return {
       msg: 'success',
-      data: history
+      data: {
+        offset: payload.skip,
+        limit: payload.limit,
+        records: history
+      }
     }
   } catch (error) {
     const formattedError = handlePrismaError(error)
