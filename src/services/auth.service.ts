@@ -143,14 +143,17 @@ export const updateName = async (payload: update) => {
 
 export const updateProfileImageService = async (userId: number, profileImagePath: string) => {
   try {
+    console.log('cek')
     const updatedUser = await prisma.$queryRaw`
       UPDATE users
       SET profile_image = ${profileImagePath}
       WHERE id = ${userId}
       RETURNING *;
     `
+    console.log(updatedUser)
     return updatedUser
   } catch (error) {
+    console.log('err', error)
     logger.error('Cannot update profile image', error)
     throw error
   }

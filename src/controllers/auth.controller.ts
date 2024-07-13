@@ -214,6 +214,7 @@ export const updateProfileImage = async (req: Request, res: Response) => {
             const userId = req.locals.id
             const profileImagePath = req.file.path
             const updatedUser = await updateProfileImageService(userId, profileImagePath)
+            console.log(updatedUser)
             res.status(200).send({ status: 200, message: 'Profile image updated successfully', data: updatedUser })
           } catch (error: any) {
             logger.error('ERR: profile - update profile image = ', error.message)

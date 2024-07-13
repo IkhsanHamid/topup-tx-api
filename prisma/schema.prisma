@@ -5,15 +5,16 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model users {
   id             Int              @id @default(autoincrement())
   first_name     String?          @db.VarChar
   last_name      String?          @db.VarChar
-  password       String?
+  password       String?          @db.VarChar
   email          String?          @db.VarChar
   profile_image  String?          @db.VarChar
   is_login       Boolean?
@@ -59,8 +60,8 @@ model services {
 
 model authentication {
   id            Int     @id @default(autoincrement())
-  access_token  String?
-  refresh_token String?
+  access_token  String? @db.VarChar
+  refresh_token String? @db.VarChar
   user_id       Int?
   users         users?  @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_authentication")
 }

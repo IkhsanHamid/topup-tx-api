@@ -24,7 +24,7 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(docs))
 // parse body request
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-app.use(express.static('uploads'))
+app.use(express.static('./src/uploads'))
 
 // cors access handler
 app.use(cors())
@@ -48,6 +48,7 @@ routes(app)
       logger.info(`Server is listening on port ${port}`)
     })
   } catch (error) {
+    console.log(error)
     logger.error('Error connecting to the database: ', error)
     process.exit(1)
   }
