@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3100/api",
+      "url": "https://topup-tx-api.vercel.app/api",
       "description": "development"
     }
   ],
@@ -15,6 +15,20 @@
     {
       "name": "Module Membership",
       "description": "Module Membership"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "https",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
     }
   ],
   "paths": {
