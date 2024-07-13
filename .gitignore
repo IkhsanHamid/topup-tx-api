@@ -13,5 +13,4 @@ DS_STORE
 
 .package.lock.json
 test.js
-uploads/
 .env
