@@ -6,12 +6,13 @@
   "scripts": {
     "start": "npx tsc -w",
     "dev": "npx nodemon",
-    "build": "prisma generate && tsc",
+    "build": "tsc",
     "prepare": "husky install",
     "format": "prettier --write .",
     "check-types": "tsc --pretty --noEmit",
     "check-format": "prettier --check .",
-    "check-lint": "eslint . --ext ts --ext tsx --ext js"
+    "check-lint": "eslint . --ext ts --ext tsx --ext js",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",
