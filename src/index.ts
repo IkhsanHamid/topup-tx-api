@@ -17,9 +17,18 @@ import prisma from './config/prisma'
 
 const app: Application = express()
 const port: any = process.env.PORT ?? 3100
+const swaggerUICss = 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.3.0/swagger-ui.min.css'
 
 // swagger config
-app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(docs))
+app.use(
+  '/api-docs',
+  swaggerUI.serve,
+  swaggerUI.setup(docs, {
+    customCss:
+      '.swagger-ui .opblock .opblock-summary-path-description-wrapper { align-items: center; display: flex; flex-wrap: wrap; gap: 0 10px; padding: 0 10px; width: 100%; }',
+    customCssUrl: swaggerUICss
+  })
+)
 
 // parse body request
 app.use(bodyParser.urlencoded({ extended: true }))
